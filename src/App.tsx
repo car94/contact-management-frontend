@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import ContactForm from './components/ContactForm';
+import ContactList from './components/ContactList';
+import { Contact } from './types';
 
-function App() {
+const App: React.FC = () => {
+  const [editingContact, setEditingContact] = useState<null | Contact>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleSave = () => {
+    setEditingContact(null);
+    setRefreshKey(prevKey => prevKey + 1);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ContactList key={refreshKey} />
+      <ContactForm contact={editingContact ?? undefined} onSave={handleSave} />
     </div>
   );
-}
+};
 
 export default App;
